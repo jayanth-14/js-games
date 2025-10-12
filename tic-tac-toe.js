@@ -55,14 +55,16 @@ function displayBoard(board) {
 }
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
+  const symbols = ["⭕️" , "❌"];
   let isOver = false;
   let gameCount = 0;
   while (!isOver) {
     displayBoard(board);
     gameCount = gameCount % 2;
     const currentUser = users[gameCount];
+    const currentSymbol = symbols[gameCount];
     const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
-
+    board[choice] = currentSymbol;
     isOver = isGameOver(board);
     gameCount = gameCount + 1;
   }
