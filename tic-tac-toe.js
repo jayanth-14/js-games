@@ -71,7 +71,7 @@ function intro() {
   if (mode === "2") {
     return getUserNames();
   }
-  return [pause("Enter User One name (❌) :")];
+  return [pause("Enter User's name (❌) :")];
 }
 
 function isGameWon(board, symbol) {
@@ -113,7 +113,7 @@ function isValid(choice, board) {
 function displayGameResults(isWin, users, lastUser) {
   if (isWin) {
     const user = users.length === 2 || lastUser !== undefined ? lastUser : "Computer";
-    return displayTitle(" It's " + user  + "'s Win ");
+    return displayTitle(" It's " + user + "'s Win ");
   }
   displayTitle(" It's a DRAW!!! ");
 }
@@ -124,6 +124,10 @@ function gameEnd(board, users, lastUser, isWin) {
   if (continuing) {
     return playGame(users);
   }
+}
+function alertInvalidPosition() {
+  console.log(yellow("Please choose a valid position!!!"));
+  pause();
 }
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
@@ -138,8 +142,7 @@ function playGame(users) {
     if (currentUser !== undefined) {
       const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
       if (!isValid(choice, board)) {
-        console.log(yellow("Please choose a valid position!!!"));
-        pause();
+        alertInvalidPosition();
         continue;
       }
       board[choice - 1] = currentSymbol;
