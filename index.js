@@ -14,16 +14,16 @@ function clear() {
   console.clear();
 }
 function pause(msg) {
-  prompt(msg || "Press Enter to continue...");
+  return prompt(msg || "Press Enter to continue...");
 }
 function getUserNames() {
   const users = [];
-  users[0] = pause("Enter User One name (⭕️) :");
-  users[1] = pause("Enter User Two name (❌) :");
+  users.push(pause("Enter User One name (⭕️) :"));
+  users.push(pause("Enter User Two name (❌) :"));
   return users;
 }
 function displayTitle(titleColor = 213, borderColor = 105) {
-  const title = bold(custom(" Tic-Tac-Toe " , titleColor));
+  const title = bold(custom(" Tic-Tac-Toe ", titleColor));
   const horizontalBorders = custom("#".repeat(15), borderColor);
   const verticalBorders = custom("#", borderColor);
   console.log("\t" + horizontalBorders);
@@ -36,12 +36,42 @@ function intro() {
   space();
   return getUserNames();
 }
+function isGameOver(board) {
+  return !board.includes("⬜️");
+}
+function isRowEnd(itemIndex) {
+  return itemIndex % 3 === 2;
+}
+function displayBoard(board) {
+  let stringBoard = '\t';
+  for (let index = 0; index < board.length; index++) {
+    let item = board[index];
+    item += isRowEnd(index) ? "\n\t" : "";
+    stringBoard += item;
+  }
+  clear();
+  space();
+  console.log(stringBoard);
+}
 function playGame(users) {
-  const board = ["⬜️","⬜️","⬜️","⬜️","⬜️","⬜️","⬜️","⬜️","⬜️"];
+  const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
+  let isOver = false;
+  let gameCount = 0;
+  while (!isOver) {
+    displayBoard(board);
+    gameCount = gameCount % 2;
+    const currentUser = users[gameCount];
+    const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
+
+    isOver = isGameOver(board);
+    gameCount = gameCount + 1;
+  }
 }
 function start() {
   clear();
   const users = intro();
+  
+  playGame(users);
 }
 
 start();
