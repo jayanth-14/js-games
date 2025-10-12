@@ -1,3 +1,4 @@
+const WINSETS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 // ===== Formatting =====
 function bold(text) {
   return "\x1B[1m" + text + "\x1B[0m";
@@ -40,9 +41,8 @@ function intro() {
   return getUserNames();
 }
 function isGameWon(board, symbol) {
-  const winSets = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-  for (let index = 0; index < winSets.length; index++) {
-    const set = winSets[index];
+  for (let index = 0; index < WINSETS.length; index++) {
+    const set = WINSETS[index];
     const isFirstSame = board[set[0]] === symbol;
     const isSecondSame = board[set[1]] === symbol;
     const isThirdSame = board[set[2]] === symbol;
@@ -67,6 +67,12 @@ function displayBoard(board) {
   console.log(stringBoard);
 }
 function isValid(choice, board) {
+  const numbers = '0123456789';
+  for (let index = 0; index < choice.length; index++) {
+    if (!numbers.includes(choice[index])) {
+      return false;
+    }
+  }
   const position = parseInt(choice);
   return position > 0 && position < 10 && board[position - 1] === "⬜️";
 }
@@ -111,7 +117,6 @@ function playGame(users) {
 function start() {
   clear();
   const users = intro();
-
   playGame(users);
 }
 
