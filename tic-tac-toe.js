@@ -25,21 +25,21 @@ function getUserNames() {
   users.push(pause("Enter User Two name (❌) :"));
   return users;
 }
-function displayTitle(titleColor = 213, borderColor = 105) {
-  const title = bold(custom(" Tic-Tac-Toe ", titleColor));
-  const horizontalBorders = custom("#".repeat(15), borderColor);
+function displayTitle(title, titleColor = 213, borderColor = 105) {
+  const titleString = bold(custom(title, titleColor));
+  const horizontalBorders = custom("#".repeat(title.length + 2), borderColor);
   const verticalBorders = custom("#", borderColor);
   console.log("\t" + horizontalBorders);
-  console.log("\t" + verticalBorders + title + verticalBorders);
+  console.log("\t" + verticalBorders + titleString + verticalBorders);
   console.log("\t" + horizontalBorders);
 }
 function intro() {
   space();
-  displayTitle();
+  displayTitle(" Tic-Tac-Toe ",);
   space();
   return getUserNames();
 }
-function isGameOver(board, symbol) {
+function isGameWon(board, symbol) {
   const winSets = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   for (let index = 0; index < winSets.length; index++) {
     const set = winSets[index];
@@ -50,7 +50,7 @@ function isGameOver(board, symbol) {
       return true;
     }
   }
-  return !board.includes("⬜️");
+  return false;
 }
 function isRowEnd(itemIndex) {
   return itemIndex % 3 === 2;
@@ -70,12 +70,27 @@ function isValid(choice, board) {
   const position = parseInt(choice);
   return position > 0 && position < 10 && board[position - 1] === "⬜️";
 }
+function displayGameResults(isWin, lastUser) {
+  if (isWin) {
+    return displayTitle(" It's " + lastUser + "'s Win ");
+  }
+  displayTitle(" It's a DRAW!!! ");
+}
+function gameEnd(board, users, lastUser, isWin) {
+  displayBoard(board);
+  displayGameResults(isWin, lastUser);
+  const continuing = confirm("Do you want to continue : ");
+  if (continuing) {
+    return playGame(users);
+  }
+}
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
   const symbols = ["⭕️", "❌"];
   let isOver = false;
+  let isWin = false;
   let gameCount = 0;
-  while (!isOver) {
+  while (!isWin && !isOver) {
     displayBoard(board);
     gameCount = gameCount % 2;
     const currentUser = users[gameCount];
@@ -87,9 +102,11 @@ function playGame(users) {
       continue;
     }
     board[choice - 1] = currentSymbol;
-    isOver = isGameOver(board, currentSymbol);
+    isWin = isGameWon(board, currentSymbol)
+    isOver = !board.includes("⬜️");;
     gameCount = gameCount + 1;
   }
+  gameEnd(board, users, users[(gameCount + 1) % 2], isWin)
 }
 function start() {
   clear();
