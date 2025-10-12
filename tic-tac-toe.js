@@ -1,5 +1,5 @@
 const WIN_SETS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-const SYMBOLS = ["❌","⭕️"];
+const SYMBOLS = ["❌", "⭕️"];
 // ===== Formatting =====
 function bold(text) {
   return "\x1B[1m" + text + "\x1B[0m";
@@ -9,6 +9,20 @@ function custom(text, code) {
 }
 function yellow(text) {
   return "\x1B[33m" + text + "\x1B[0m";
+}
+
+// ===== Bot Logic =====
+function isOccupied(board, position) {
+  return board[position] !== "⬜️";
+}
+function generatePosition(board) {
+  while (true) {
+    const randomIndex = Math.floor(Math.random() * 9);
+    if (isOccupied(board, randomIndex)) {
+      continue;
+    }
+    return randomIndex;
+  }
 }
 
 // ===== Custom Utilities =====
@@ -35,12 +49,31 @@ function displayTitle(title, titleColor = 213, borderColor = 105) {
   console.log("\t" + verticalBorders + titleString + verticalBorders);
   console.log("\t" + horizontalBorders);
 }
+function askMode() {
+  console.log("Who do you want to lose against today ? 😏");
+  console.log("1. Computer 💻 (good luck)");
+  console.log("2. Friend 🙍‍♂️ (good luck anyway)");
+  const option = pause("Enter The mode You want to play : ");
+  if (!["1", "2"].includes(option)) {
+    console.log(yellow("Please enter a valid mode : "));
+    pause();
+    return start();
+  }
+  return option;
+}
+
 function intro() {
   space();
   displayTitle(" Tic-Tac-Toe ",);
   space();
-  return getUserNames();
+  const mode = askMode();
+  space();
+  if (mode === "2") {
+    return getUserNames();
+  }
+  return [pause("Enter User One name (❌) :")];
 }
+
 function isGameWon(board, symbol) {
   for (let index = 0; index < WIN_SETS.length; index++) {
     const set = WIN_SETS[index];
@@ -91,7 +124,7 @@ function gameEnd(board, users, lastUser, isWin) {
     return playGame(users);
   }
 }
-function playGame(users) {
+function playGame(users, isComputerMode = false) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
   let isOver = false;
   let isWin = false;
@@ -101,13 +134,18 @@ function playGame(users) {
     gameCount = gameCount % 2;
     const currentUser = users[gameCount];
     const currentSymbol = SYMBOLS[gameCount];
-    const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
-    if (!isValid(choice, board)) {
-      console.log(yellow("Please choose a valid position!!!"));
-      pause();
-      continue;
+    if (currentUser !== undefined) {
+      const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
+      if (!isValid(choice, board)) {
+        console.log(yellow("Please choose a valid position!!!"));
+        pause();
+        continue;
+      }
+      board[choice - 1] = currentSymbol;
+    } else {
+      const choice = generatePosition(board);
+      board[choice] = currentSymbol;
     }
-    board[choice - 1] = currentSymbol;
     isWin = isGameWon(board, currentSymbol)
     isOver = !board.includes("⬜️");;
     gameCount = gameCount + 1;
@@ -117,7 +155,8 @@ function playGame(users) {
 function start() {
   clear();
   const users = intro();
-  playGame(users);
+  const isComputerMode = users.length === 1;
+  playGame(users, isComputerMode);
 }
 
 start();
