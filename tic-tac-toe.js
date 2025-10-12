@@ -110,21 +110,22 @@ function isValid(choice, board) {
   const position = parseInt(choice);
   return position > 0 && position < 10 && board[position - 1] === "⬜️";
 }
-function displayGameResults(isWin, lastUser) {
+function displayGameResults(isWin, users, lastUser) {
   if (isWin) {
-    return displayTitle(" It's " + lastUser + "'s Win ");
+    const user = users.length === 2 || lastUser !== undefined ? lastUser : "Computer";
+    return displayTitle(" It's " + user  + "'s Win ");
   }
   displayTitle(" It's a DRAW!!! ");
 }
 function gameEnd(board, users, lastUser, isWin) {
   displayBoard(board);
-  displayGameResults(isWin, lastUser);
+  displayGameResults(isWin, users, lastUser);
   const continuing = confirm("Do you want to continue : ");
   if (continuing) {
     return playGame(users);
   }
 }
-function playGame(users, isComputerMode = false) {
+function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
   let isOver = false;
   let isWin = false;
