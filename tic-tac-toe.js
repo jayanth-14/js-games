@@ -39,7 +39,17 @@ function intro() {
   space();
   return getUserNames();
 }
-function isGameOver(board) {
+function isGameOver(board, symbol) {
+  const winSets = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  for (let index = 0; index < winSets.length; index++) {
+    const set = winSets[index];
+    const isFirstSame = board[set[0]] === symbol;
+    const isSecondSame = board[set[1]] === symbol;
+    const isThirdSame = board[set[2]] === symbol;
+    if (isFirstSame && isSecondSame && isThirdSame) {
+      return true;
+    }
+  }
   return !board.includes("⬜️");
 }
 function isRowEnd(itemIndex) {
@@ -62,7 +72,7 @@ function isValid(choice, board) {
 }
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
-  const symbols = ["⭕️" , "❌"];
+  const symbols = ["⭕️", "❌"];
   let isOver = false;
   let gameCount = 0;
   while (!isOver) {
@@ -77,14 +87,14 @@ function playGame(users) {
       continue;
     }
     board[choice - 1] = currentSymbol;
-    isOver = isGameOver(board);
+    isOver = isGameOver(board, currentSymbol);
     gameCount = gameCount + 1;
   }
 }
 function start() {
   clear();
   const users = intro();
-  
+
   playGame(users);
 }
 
