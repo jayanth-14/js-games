@@ -5,6 +5,9 @@ function bold(text) {
 function custom(text, code) {
   return "\x1B[38;5;" + code + "m" + text + "\x1B[0m";
 }
+function yellow(text) {
+  return "\x1B[33m" + text + "\x1B[0m";
+}
 
 // ===== Custom Utilities =====
 function space(lines = 1) {
@@ -53,6 +56,10 @@ function displayBoard(board) {
   space();
   console.log(stringBoard);
 }
+function isValid(choice, board) {
+  const position = parseInt(choice);
+  return position > 0 && position < 10 && board[position - 1] === "⬜️";
+}
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
   const symbols = ["⭕️" , "❌"];
@@ -64,7 +71,12 @@ function playGame(users) {
     const currentUser = users[gameCount];
     const currentSymbol = symbols[gameCount];
     const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
-    board[choice] = currentSymbol;
+    if (!isValid(choice, board)) {
+      console.log(yellow("Please choose a valid position!!!"));
+      pause();
+      continue;
+    }
+    board[choice - 1] = currentSymbol;
     isOver = isGameOver(board);
     gameCount = gameCount + 1;
   }
