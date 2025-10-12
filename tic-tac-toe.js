@@ -1,4 +1,5 @@
-const WINSETS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+const WIN_SETS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+const SYMBOLS = ["❌","⭕️"];
 // ===== Formatting =====
 function bold(text) {
   return "\x1B[1m" + text + "\x1B[0m";
@@ -22,8 +23,8 @@ function pause(msg) {
 }
 function getUserNames() {
   const users = [];
-  users.push(pause("Enter User One name (⭕️) :"));
-  users.push(pause("Enter User Two name (❌) :"));
+  users.push(pause("Enter User One name (❌) :"));
+  users.push(pause("Enter User Two name (⭕️) :"));
   return users;
 }
 function displayTitle(title, titleColor = 213, borderColor = 105) {
@@ -41,8 +42,8 @@ function intro() {
   return getUserNames();
 }
 function isGameWon(board, symbol) {
-  for (let index = 0; index < WINSETS.length; index++) {
-    const set = WINSETS[index];
+  for (let index = 0; index < WIN_SETS.length; index++) {
+    const set = WIN_SETS[index];
     const isFirstSame = board[set[0]] === symbol;
     const isSecondSame = board[set[1]] === symbol;
     const isThirdSame = board[set[2]] === symbol;
@@ -92,7 +93,6 @@ function gameEnd(board, users, lastUser, isWin) {
 }
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
-  const symbols = ["⭕️", "❌"];
   let isOver = false;
   let isWin = false;
   let gameCount = 0;
@@ -100,7 +100,7 @@ function playGame(users) {
     displayBoard(board);
     gameCount = gameCount % 2;
     const currentUser = users[gameCount];
-    const currentSymbol = symbols[gameCount];
+    const currentSymbol = SYMBOLS[gameCount];
     const choice = pause(currentUser + ", please Enter your choice (1 - 9) : ");
     if (!isValid(choice, board)) {
       console.log(yellow("Please choose a valid position!!!"));
