@@ -19,8 +19,11 @@ function generatePosition(board) {
   let isGenerated = false;
   let randomIndex = 0;
   while (!isGenerated) {
+    if (board[0] === board[1] && board[0] === SYMBOLS[0]) {
+      return 2;
+    }
     randomIndex = Math.floor(Math.random() * 9);
-    isGenerated = !isOccupied(board, randomIndex)
+    isGenerated = !isOccupied(board, randomIndex);
   }
   return randomIndex;
 }
