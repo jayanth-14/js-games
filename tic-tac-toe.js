@@ -12,18 +12,32 @@ function yellow(text) {
 }
 
 // ===== Bot Logic =====
-function isOccupied(board, position) {
-  return board[position] !== "⬜️";
+function isUnoccupied(board, position) {
+  return board[position] === "⬜️";
 }
-function generatePosition(board) {
+function choosePosition(board, winSets) {
+  for (let index = 0; index < winSets.length; index++) {
+    const firstCell = winSets[index][0];
+    const secondCell = winSets[index][1];
+    const thirdCell = winSets[index][2];
+    if (board[firstCell] === board[secondCell] && board[thirdCell] === "⬜️" && board[firstCell] === SYMBOLS[0]) {
+      return thirdCell;
+    }
+    if (board[secondCell] === board[thirdCell] && board[firstCell] === "⬜️" && board[secondCell] === SYMBOLS[0]) {
+      return firstCell;
+    }
+    if (board[firstCell] === board[thirdCell] && board[secondCell] === "⬜️" && board[firstCell] === SYMBOLS[0]) {
+      return secondCell;
+    }
+  }
+  return Math.floor(Math.random() * 9);
+}
+function generatePosition(board, winSets) {
   let isGenerated = false;
   let randomIndex = 0;
   while (!isGenerated) {
-    if (board[0] === board[1] && board[0] === SYMBOLS[0]) {
-      return 2;
-    }
-    randomIndex = Math.floor(Math.random() * 9);
-    isGenerated = !isOccupied(board, randomIndex);
+    randomIndex = choosePosition(board, winSets);
+    isGenerated = isUnoccupied(board, randomIndex);
   }
   return randomIndex;
 }
@@ -77,9 +91,9 @@ function intro() {
   return [pause("Enter User's name (❌) :")];
 }
 
-function isGameWon(board, symbol) {
-  for (let index = 0; index < WIN_SETS.length; index++) {
-    const set = WIN_SETS[index];
+function isGameWon(board, symbol, winSets) {
+  for (let index = 0; index < winSets.length; index++) {
+    const set = winSets[index];
     const isFirstSame = board[set[0]] === symbol;
     const isSecondSame = board[set[1]] === symbol;
     const isThirdSame = board[set[2]] === symbol;
@@ -132,8 +146,20 @@ function alertInvalidPosition() {
   console.log(yellow("Please choose a valid position!!!"));
   pause();
 }
+function shuffle(array) {
+  const shuffled = [];
+  while (shuffled.length < array.length) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    if (shuffled.includes(array[randomIndex])) {
+      continue;
+    }
+    shuffled.push(array[randomIndex]);
+  }
+  return shuffled;
+}
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
+  const shuffledWinSets = shuffle(WIN_SETS);
   let isOver = false;
   let isWin = false;
   let gameCount = 0;
@@ -150,10 +176,10 @@ function playGame(users) {
       }
       board[choice - 1] = currentSymbol;
     } else {
-      const choice = generatePosition(board);
+      const choice = generatePosition(board, shuffledWinSets);
       board[choice] = currentSymbol;
     }
-    isWin = isGameWon(board, currentSymbol)
+    isWin = isGameWon(board, currentSymbol, shuffledWinSets)
     isOver = !board.includes("⬜️");;
     gameCount = gameCount + 1;
   }
