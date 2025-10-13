@@ -12,11 +12,12 @@ function custom(text, code) {
 function yellow(text) {
   return "\x1B[33m" + text + "\x1B[0m";
 }
-function generateBoard() {
+function generateBoard(snakeX, snakeY) {
   let boardString = "\t";
   for (let row = 0; row < BOARD[0]; row++) {
     for (let column = 0; column < BOARD[1]; column++) {
-      boardString += "⬜️";
+      const isSnakePresent = snakeY.includes(column) && snakeX.includes(row);
+      boardString += isSnakePresent  ? "🟩" : "⬜️";
     }
     boardString += "\n\t";
   }
@@ -39,8 +40,15 @@ function displayTitle(title, titleColor = 213, borderColor = 33) {
 function start() {
   displayTitle(" 🐉 GROW YOUR DRAGON 🐉 ");
   space();
-  const board = generateBoard();
-  console.log(board);
+  const snakeX = [5, 5];
+  const snakeY = [5, 6];
+  let isCollided = false;
+  let i = 0;
+  while (!isCollided) {
+    const board = generateBoard(snakeX, snakeY);
+    console.log(board);
+    isCollided = i++ < 10;
+  }
 }
 
 start();
