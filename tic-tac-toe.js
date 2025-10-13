@@ -16,13 +16,13 @@ function isOccupied(board, position) {
   return board[position] !== "⬜️";
 }
 function generatePosition(board) {
-  while (true) {
-    const randomIndex = Math.floor(Math.random() * 9);
-    if (isOccupied(board, randomIndex)) {
-      continue;
-    }
-    return randomIndex;
+  let isGenerated = false;
+  let randomIndex = 0;
+  while (!isGenerated) {
+    randomIndex = Math.floor(Math.random() * 9);
+    isGenerated = !isOccupied(board, randomIndex)
   }
+  return randomIndex;
 }
 
 // ===== Custom Utilities =====
