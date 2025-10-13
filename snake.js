@@ -12,12 +12,21 @@ function custom(text, code) {
 function yellow(text) {
   return "\x1B[33m" + text + "\x1B[0m";
 }
+function getSnakeColumns(row, snakeX, snakeY) {
+  const columns = [];
+  for (let index = 0; index < snakeX.length; index++) {
+    if (snakeX[index] === row) {
+      columns.push(snakeY[index]);
+    }
+  }
+  return columns;
+}
 function generateBoard(snakeX, snakeY) {
   let boardString = "\t";
   for (let row = 0; row < BOARD[0]; row++) {
+    const snakePresentColumns = getSnakeColumns(row, snakeX, snakeY);
     for (let column = 0; column < BOARD[1]; column++) {
-      const isSnakePresent = snakeY.includes(column) && snakeX.includes(row);
-      boardString += isSnakePresent  ? "🟩" : "⬜️";
+      boardString += snakePresentColumns.includes(column) ? "🟩" : "⬜️";
     }
     boardString += "\n\t";
   }
@@ -40,8 +49,8 @@ function displayTitle(title, titleColor = 213, borderColor = 33) {
 function start() {
   displayTitle(" 🐉 GROW YOUR DRAGON 🐉 ");
   space();
-  const snakeX = [5, 5];
-  const snakeY = [5, 6];
+  const snakeX = [5, 5, 4 ,3];
+  const snakeY = [5, 6, 6, 6];
   let isCollided = false;
   let i = 0;
   while (!isCollided) {
