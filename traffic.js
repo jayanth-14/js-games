@@ -54,7 +54,11 @@ function getSymbol(array, row, column, symbol) {
   return '  ';
 }
 
-function displayJunction(length, signals, signalSymbols, roads, vehicle) {
+function toggleSignal(signal, signalCounter, activeSignal) {
+  return signalCounter === activeSignal ? green(signal) : red(signal);
+}
+
+function displayJunction(length, signals, signalSymbols, roads, vehicle, activeSignal) {
   const half = Math.floor(length / 2);
   let junction = "";
   let signalCounter = 0;
@@ -63,7 +67,7 @@ function displayJunction(length, signals, signalSymbols, roads, vehicle) {
       const ts = getSymbol(signals, i, j, signalSymbols[signalCounter]);
       const vs = getSymbol(roads, i, j, vehicle);
       signalCounter += ts !== "  " ? 1 : 0;
-      junction += ts === '  ' ? vs : ts;
+      junction += ts === '  ' ? vs : toggleSignal(ts, signalCounter, activeSignal);
     }
     junction += "\n";
   }
@@ -76,8 +80,10 @@ function start() {
   const roads = [[[1, 2]], [[2, 0]], [[]], [[]]];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
   const signalNumbers = ["1", "2", "3", "4"];
+  let activeSignal = 5;
 
-  displayJunction(length, signals, signalNumbers, roads, vehicle);
+
+  displayJunction(length, signals, signalNumbers, roads, vehicle, activeSignal);
 }
 
 start();
