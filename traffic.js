@@ -1,29 +1,30 @@
+
 function getSymbol(i, j, half) {
-  if (i === 2 && j === 2) {
+  if (i === half && j === half) {
     return "  ";
   }
-  if (i === 2 || j === 2) {
+  if (i === half || j === half) {
     return "🚖";
   }
   if (i + 1 === half && j + 1  === half) {
-    return "🟩";
+    return "🟥";
   }
   if (i - 1 === half && j - 1  === half) {
-    return "🟩";
+    return "🟥";
   }
   if (i + 1 === half && j - 1  === half) {
-    return "🟩";
+    return "🟥";
   }
   if (i - 1 === half && j + 1  === half) {
-    return "🟩";
+    return "🟥";
   }
   return "  ";
 }
 function displayJunction(length) {
   const half = Math.floor(length / 2);
   let junction = "";
-  for (let i = 0; i < 5; i++) {
-    for (let j = 0; j < 5; j++) {
+  for (let i = 0; i < length; i++) {
+    for (let j = 0; j < length; j++) {
       junction += getSymbol(i, j, half);
     }
     junction += "\n";
@@ -33,7 +34,7 @@ function displayJunction(length) {
 
 function start() {
   const length = 5;
-  const roadOne = ["🚖"];
+  const roadOne = [[3,2]];
   const roadTwo = [];
   const roadThree = [];
   const roadFour = [];
