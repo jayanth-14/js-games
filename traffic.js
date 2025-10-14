@@ -37,21 +37,24 @@ function includes(array, target) {
   return false;
 }
 
-function isCarAvailable(roads, row, column) {
-  for (let roadIndex = 0; roadIndex < roads.length; roadIndex++) {
-    if (includes(roads[roadIndex], [row, column])) {
-      return true;
+function getSymbol(array, row, column, symbol) {
+  for (let index = 0; index < array.length; index++) {
+    if (includes(array[index], [row, column])) {
+      return symbol;
     }
   }
-  return false;
+  return '  ';
 }
 
-function displayJunction(length, roads, vehicle) {
+function displayJunction(length, signals, roads, vehicle) {
   const half = Math.floor(length / 2);
   let junction = "";
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
-      junction += isCarAvailable(roads, i, j) ? vehicle : '  ';
+      const ts = getSymbol(signals, i, j, '🔴');
+      const vs = getSymbol(roads, i, j, vehicle);
+
+      junction += ts === '  ' ? vs : ts;
     }
     junction += "\n";
   }
@@ -61,9 +64,10 @@ function displayJunction(length, roads, vehicle) {
 function start() {
   const length = 5;
   const vehicle = "🚖";
-  const roads = [[[1, 2]], [[2,0]], [[3, 2]], [[2, 3]]];
+  const roads = [[[1, 2]], [[2, 0]], [[]], [[]]];
+  const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
 
-  displayJunction(length, roads, vehicle);
+  displayJunction(length, signals, roads, vehicle);
 }
 
 start();
