@@ -21,11 +21,15 @@ function getSnakeColumns(row, snakeX, snakeY) {
   }
   return columns;
 }
-function generateBoard(snakeX, snakeY) {
+function generateBoard(snakeX, snakeY, fruit) {
   let boardString = "\t";
   for (let row = 0; row < BOARD[0]; row++) {
     const snakePresentColumns = getSnakeColumns(row, snakeX, snakeY);
     for (let column = 0; column < BOARD[1]; column++) {
+      if (row === fruit[0] && column === fruit[1]) {
+        boardString += "🍎";
+        continue;
+      }
       boardString += snakePresentColumns.includes(column) ? "🟩" : "⬜️";
     }
     boardString += "\n\t";
@@ -46,17 +50,55 @@ function displayTitle(title, titleColor = 213, borderColor = 33) {
   console.log("\t" + verticalBorders + titleString + verticalBorders);
   console.log("\t" + horizontalBorders);
 }
+function colided(snakeX, snakeY) {
+  return (snakeX[0] === 0 || snakeX[0] === BOARD[0]) || (snakeY[0] === 0 || snakeY[0] === BOARD[0])
+}
+function updateRows(rows, modifier) {
+  rows.unshift(rows[0] + modifier);
+  rows.pop();
+}
+function updateColumns(columns, modifier) {
+  columns.unshift(columns[0] + modifier);
+  columns.pop();
+}
+function askDirection(modifiers) {
+  const input = prompt("Enter direction (w ⬆️, a ⬅️, s ⬇️, d ➡️ :");
+  switch (input) {
+    case "w": return [-1, 0];
+    case "s": return [1, 0];
+    case "a": return [0, -1];
+    case "d": return [0, 1];
+    default: console.log(yellow("Entered invalid option!!!"));
+      return [0, 0];
+  }
+}
+function newFruit(fruit) {
+  if (fruit.length === 0) {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    return [x, y];
+  }
+  return fruit;
+}
 function start() {
   displayTitle(" 🐉 GROW YOUR DRAGON 🐉 ");
   space();
-  const snakeX = [5, 5, 4 ,3];
+  const snakeX = [5, 5, 4, 3];
   const snakeY = [5, 6, 6, 6];
   let isCollided = false;
-  let i = 0;
+  let modifiers = [-1, 0];
+  let fruit = [5, 5];
   while (!isCollided) {
-    const board = generateBoard(snakeX, snakeY);
+    clear();
+    space();
+    fruit = newFruit(fruit);
+    const board = generateBoard(snakeX, snakeY, fruit);
     console.log(board);
-    isCollided = i++ < 10;
+    // modifiers = askDirection(modifiers);
+    updateRows(snakeX, modifiers[0], fruit);
+    updateColumns(snakeY, modifiers[1], fruit);
+    for (let index = 0; index < 100000000; index++)
+    isCollided = colided(snakeX, snakeY);
   }
 }
 

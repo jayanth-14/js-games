@@ -52,12 +52,14 @@ function clear() {
 function pause(msg) {
   return prompt(msg || "Press Enter to continue...");
 }
+
 function getUserNames() {
   const users = [];
   users.push(pause("Enter User One name (❌) :"));
   users.push(pause("Enter User Two name (⭕️) :"));
   return users;
 }
+
 function displayTitle(title, titleColor = 213, borderColor = 105) {
   const titleString = bold(custom(title, titleColor));
   const horizontalBorders = custom("#".repeat(title.length + 2), borderColor);
@@ -66,6 +68,7 @@ function displayTitle(title, titleColor = 213, borderColor = 105) {
   console.log("\t" + verticalBorders + titleString + verticalBorders);
   console.log("\t" + horizontalBorders);
 }
+
 function askMode() {
   console.log("Who do you want to lose against today ? 😏");
   console.log("1. Computer 💻 (good luck)");
@@ -146,20 +149,8 @@ function alertInvalidPosition() {
   console.log(yellow("Please choose a valid position!!!"));
   pause();
 }
-function shuffle(array) {
-  const shuffled = [];
-  while (shuffled.length < array.length) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    if (shuffled.includes(array[randomIndex])) {
-      continue;
-    }
-    shuffled.push(array[randomIndex]);
-  }
-  return shuffled;
-}
 function playGame(users) {
   const board = ["⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️", "⬜️"];
-  const shuffledWinSets = shuffle(WIN_SETS);
   let isOver = false;
   let isWin = false;
   let gameCount = 0;
@@ -176,10 +167,10 @@ function playGame(users) {
       }
       board[choice - 1] = currentSymbol;
     } else {
-      const choice = generatePosition(board, shuffledWinSets);
+      const choice = generatePosition(board, WIN_SETS);
       board[choice] = currentSymbol;
     }
-    isWin = isGameWon(board, currentSymbol, shuffledWinSets)
+    isWin = isGameWon(board, currentSymbol, WIN_SETS)
     isOver = !board.includes("⬜️");;
     gameCount = gameCount + 1;
   }
