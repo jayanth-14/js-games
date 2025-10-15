@@ -78,14 +78,19 @@ function displayJunction(length, signals, signalSymbols, roads, vehicle, activeS
   console.log(junction);
 }
 
+function askSignal() {
+  return parseInt(prompt("Enter the signal number to open : "));
+}
+
 function start() {
   const length = 5;
   const vehicle = "🚖";
   const roads = [[[0, 2], [1, 2]], [[2, 0]], [[]], [[]]];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
   const signalNumbers = ["1 ", "2 ", "3 ", "4 "];
-  let activeSignal = 2;
-
+  let activeSignal = 0;
+  displayJunction(length, signals, signalNumbers, roads, vehicle, activeSignal);
+  activeSignal = askSignal();
   displayJunction(length, signals, signalNumbers, roads, vehicle, activeSignal);
 }
 
