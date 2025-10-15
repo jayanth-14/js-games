@@ -105,19 +105,47 @@ function areRoadsEmpty(roads) {
   return true;
 }
 
+function generateVehiclePosition(size) {
+  const half = Math.floor(size / 2);
+  if (Math.random() < 0.5) {
+    return [half, Math.floor(Math.random() * size)];
+  }
+  return [Math.floor(Math.random() * size), half];
+}
+
+function addVehicleToRoad(vehiclePosition, roads, size) {
+  const half = Math.floor(size / 2);
+  if (vehiclePosition[1] < half) {
+    roads[0].push(vehiclePosition);
+    return;
+  }
+  if (vehiclePosition[0] < half) {
+    roads[1].push(vehiclePosition);
+    return;
+  }
+  if (vehiclePosition[1] > half) {
+    roads[2].push(vehiclePosition);
+    return;
+  }
+  if (vehiclePosition[0] > half) {
+    roads[3].push(vehiclePosition);
+    return;
+  }
+}
+
 function start() {
   const length = 5;
-  const roads = [[[2, 0]], [[0, 2], [1, 2]], [[2, 3], [2, 4]], [[3, 2]]];
+  const roads = [[], [], [], []];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
 
   let activeSignal = 0;
   let isGameOver = false;
-
+  addVehicleToRoad(generateVehiclePosition(length), roads, length);
   while (!isGameOver) {
+    addVehicleToRoad(generateVehiclePosition(length), roads, length);
     displayJunction(length, signals, roads, activeSignal);
     activeSignal = askSignal();
     const roadIndex = getRoadIndex(activeSignal);
-
     popVehicles(roads, roadIndex);
     isGameOver = areRoadsEmpty(roads);
     console.clear();
