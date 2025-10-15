@@ -83,22 +83,25 @@ function askSignal() {
   return parseInt(prompt("Enter the signal number to open : "));
 }
 function getRoadIndex(activeSignal) {
-  return (activeSignal + 2) % 4;
+  return (activeSignal + 1) % 4;
 }
 function popVehicles(roads, roadIndex) {  
   roads[roadIndex].splice(0, roads[roadIndex].length);
 }
 function start() {
   const length = 5;
-  const roads = [[[0, 2], [1, 2]], [[2, 0]], [[]], [[]]];
+  const roads = [[[2, 0]], [[0, 2], [1, 2]], [[2,3], [2,4]], [[3,2]]];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
   let activeSignal = 0;
   displayJunction(length, signals, roads, activeSignal);
   
   activeSignal = askSignal();
   const roadIndex = getRoadIndex(activeSignal);
+  console.log(roadIndex);
+  
   popVehicles(roads, roadIndex);
   displayJunction(length, signals, roads, activeSignal);
+  console.log(roadIndex);
 }
 
 start();
