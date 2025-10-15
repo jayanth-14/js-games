@@ -85,15 +85,20 @@ function askSignal() {
 function getRoadIndex(activeSignal) {
   return (activeSignal + 2) % 4;
 }
+function popVehicles(roads, roadIndex) {  
+  roads[roadIndex].splice(0, roads[roadIndex].length);
+}
 function start() {
   const length = 5;
   const roads = [[[0, 2], [1, 2]], [[2, 0]], [[]], [[]]];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
   let activeSignal = 0;
   displayJunction(length, signals, roads, activeSignal);
+  
   activeSignal = askSignal();
+  const roadIndex = getRoadIndex(activeSignal);
+  popVehicles(roads, roadIndex);
   displayJunction(length, signals, roads, activeSignal);
-  console.log(getRoadIndex(activeSignal));
 }
 
 start();
