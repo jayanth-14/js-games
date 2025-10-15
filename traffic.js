@@ -1,3 +1,5 @@
+const VEHICLE = "🚖";
+const SIGNAL_NUMBERS = ["1 ", "2 ", "3 ", "4 "];
 function red(text) {
   return "\x1B[31m" + text + "\x1B[0m";
 }
@@ -62,14 +64,14 @@ function toggleSignal(signal, signalCounter, activeSignal) {
   return signalCounter === activeSignal ? bold(green(signal)) : bold(red(signal));
 }
 
-function displayJunction(length, signals, signalSymbols, roads, vehicle, activeSignal) {
+function displayJunction(length, signals, roads, activeSignal) {
   const half = Math.floor(length / 2);
   let junction = "";
   let signalCounter = 0;
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
-      const ts = getSymbol(signals, i, j, signalSymbols[signalCounter]);
-      const vs = getSymbol(roads, i, j, vehicle);
+      const ts = getSymbol(signals, i, j, SIGNAL_NUMBERS[signalCounter]);
+      const vs = getSymbol(roads, i, j, VEHICLE);
       signalCounter += ts !== "  " ? 1 : 0;
       junction += ts === '  ' ? vs : toggleSignal(ts, signalCounter, activeSignal);
     }
@@ -84,14 +86,12 @@ function askSignal() {
 
 function start() {
   const length = 5;
-  const vehicle = "🚖";
   const roads = [[[0, 2], [1, 2]], [[2, 0]], [[]], [[]]];
   const signals = [[[1, 1]], [[1, 3]], [[3, 3]], [[3, 1]]];
-  const signalNumbers = ["1 ", "2 ", "3 ", "4 "];
   let activeSignal = 0;
-  displayJunction(length, signals, signalNumbers, roads, vehicle, activeSignal);
+  displayJunction(length, signals, roads, activeSignal);
   activeSignal = askSignal();
-  displayJunction(length, signals, signalNumbers, roads, vehicle, activeSignal);
+  displayJunction(length, signals, roads, activeSignal);
 }
 
 start();
