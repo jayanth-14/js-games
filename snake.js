@@ -61,7 +61,7 @@ function updateColumns(columns, modifier) {
   columns.unshift(columns[0] + modifier);
   columns.pop();
 }
-function askDirection(modifiers) {
+function askDirection() {
   const input = prompt("Enter direction (w ⬆️, a ⬅️, s ⬇️, d ➡️ :");
   switch (input) {
     case "w": return [-1, 0];
@@ -94,10 +94,10 @@ function start() {
     fruit = newFruit(fruit);
     const board = generateBoard(snakeX, snakeY, fruit);
     console.log(board);
-    // modifiers = askDirection(modifiers);
+    modifiers = askDirection(modifiers);
     updateRows(snakeX, modifiers[0], fruit);
     updateColumns(snakeY, modifiers[1], fruit);
-    for (let index = 0; index < 100000000; index++)
+    // for (let index = 0; index < 100000000; index++)÷
     isCollided = colided(snakeX, snakeY);
   }
 }
